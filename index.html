@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopHub - Ecommerce Platform</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!-- Meta tags for social sharing -->
+    <meta property="og:title" content="ShopHub - Shop the Best Products">
+    <meta property="og:description" content="Discover amazing products with exclusive affiliate discounts">
+    <meta property="og:type" content="website">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">ShopHub</div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Shop</a></li>
+                <li><a href="cart.html">Cart <span id="cart-count" class="badge">0</span></a></li>
+                <li><a href="affiliate.html">Join Affiliate</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Welcome to ShopHub</h1>
+            <p>Your one-stop shop for premium products</p>
+            <button class="btn btn-primary" onclick="location.href='products.html'">Shop Now</button>
+        </div>
+    </section>
+
+    <section class="featured-products section">
+        <div class="container">
+            <h2>Featured Products</h2>
+            <div class="products-grid" id="featured-products">
+                <!-- Products will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <section class="affiliate-banner section">
+        <div class="container">
+            <h2>Earn Money with Our Affiliate Program</h2>
+            <p>Join thousands of affiliates earning commissions by promoting our products on TikTok, Facebook, and Instagram</p>
+            <button class="btn btn-secondary" onclick="location.href='affiliate.html'">Become an Affiliate</button>
+        </div>
+    </section>
+
+    <section class="social-section section">
+        <div class="container">
+            <h2>Follow Us</h2>
+            <div class="social-links">
+                <a href="https://www.tiktok.com/@shophub" target="_blank" class="social-icon">TikTok</a>
+                <a href="https://www.facebook.com/shophub" target="_blank" class="social-icon">Facebook</a>
+                <a href="https://www.instagram.com/shophub" target="_blank" class="social-icon">Instagram</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 ShopHub. All rights reserved.</p>
+            <ul>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms & Conditions</a></li>
+                <li><a href="#">Contact Us</a></li>
+            </ul>
+        </div>
+    </footer>
+
+    <script src="assets/js/app.js"></script>
+    <script src="assets/js/cart.js"></script>
+    <script src="assets/js/social.js"></script>
+    <script>
+        // Load featured products
+        async function loadFeaturedProducts() {
+            try {
+                const response = await fetch('/api/products');
+                const products = await response.json();
+                const featured = products.slice(0, 4);
+                
+                const container = document.getElementById('featured-products');
+                container.innerHTML = featured.map(product => `
+                    <div class="product-card">
+                        <img src="${product.image_url}" alt="${product.name}">
+                        <h3>${product.name}</h3>
+                        <p class="price">$${product.price}</p>
+                        <button class="btn btn-primary" onclick="viewProduct(${product.id})">View Details</button>
+                        <button class="btn btn-secondary" onclick="addToCart(${product.id}, '${product.name}', ${product.price})">Add to Cart</button>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading products:', error);
+            }
+        }
+
+        function viewProduct(id) {
+            location.href = `product-detail.html?id=${id}`;
+        }
+
+        loadFeaturedProducts();
+        updateCartCount();
+    </script>
+</body>
+</html>

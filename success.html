@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Success - ShopHub</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">ShopHub</div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Shop</a></li>
+                <li><a href="affiliate.html">Join Affiliate</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="success-section section">
+        <div class="container">
+            <div class="success-container">
+                <div class="success-icon">✓</div>
+                <h1>Order Successful!</h1>
+                <p class="success-message">Thank you for your purchase!</p>
+
+                <div class="order-details">
+                    <h2>Order Confirmation</h2>
+                    <div class="detail-row">
+                        <span>Order Number:</span>
+                        <strong id="order-number">-</strong>
+                    </div>
+                    <div class="detail-row">
+                        <span>Order ID:</span>
+                        <strong id="order-id">-</strong>
+                    </div>
+                    <div class="detail-row">
+                        <span>Transaction ID:</span>
+                        <strong id="transaction-id">-</strong>
+                    </div>
+                    <div class="detail-row">
+                        <span>Date:</span>
+                        <strong id="order-date">-</strong>
+                    </div>
+                </div>
+
+                <div class="next-steps">
+                    <h3>What's Next?</h3>
+                    <ul>
+                        <li>📧 A confirmation email has been sent to your registered email address</li>
+                        <li>📦 Your order is being prepared for shipment</li>
+                        <li>🚚 You will receive tracking information via email</li>
+                        <li>💬 You can track your order status anytime from your account</li>
+                    </ul>
+                </div>
+
+                <div class="share-success">
+                    <h3>Share Your Experience</h3>
+                    <button class="btn btn-secondary" onclick="shareSuccessOnTikTok()">
+                        🎵 Share on TikTok
+                    </button>
+                    <button class="btn btn-secondary" onclick="shareSuccessOnFacebook()">
+                        👍 Share on Facebook
+                    </button>
+                    <button class="btn btn-secondary" onclick="shareSuccessOnInstagram()">
+                        📷 Share on Instagram
+                    </button>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="location.href='products.html'">
+                        Continue Shopping
+                    </button>
+                    <button class="btn btn-secondary" onclick="printOrder()">
+                        🖨️ Print Receipt
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 ShopHub. All rights reserved.</p>
+            <ul>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms & Conditions</a></li>
+                <li><a href="affiliate.html">Become an Affiliate</a></li>
+            </ul>
+        </div>
+    </footer>
+
+    <script src="assets/js/app.js"></script>
+    <script src="assets/js/social.js"></script>
+    <script>
+        function loadOrderDetails() {
+            const params = new URLSearchParams(window.location.search);
+            const orderId = params.get('order_id');
+            const orderNumber = params.get('order_number');
+            const transactionId = params.get('transaction_id');
+
+            document.getElementById('order-id').textContent = orderId || '-';
+            document.getElementById('order-number').textContent = orderNumber || '-';
+            document.getElementById('transaction-id').textContent = transactionId || '-';
+            document.getElementById('order-date').textContent = new Date().toLocaleDateString();
+        }
+
+        function shareSuccessOnTikTok() {
+            const text = "🎉 Just bought amazing products from @shophub! Check them out! #shopping #ecommerce #shophub";
+            window.open(`https://www.tiktok.com/`, '_blank');
+            alert('Share your purchase experience on TikTok!');
+        }
+
+        function shareSuccessOnFacebook() {
+            const text = "🎉 Just bought amazing products from ShopHub!";
+            window.open(`https://www.facebook.com/`, '_blank');
+            alert('Share your purchase experience on Facebook!');
+        }
+
+        function shareSuccessOnInstagram() {
+            alert('Share your purchase experience on Instagram using #shophub');
+            window.open(`https://www.instagram.com/`, '_blank');
+        }
+
+        function printOrder() {
+            window.print();
+        }
+
+        loadOrderDetails();
+    </script>
+</body>
+</html>

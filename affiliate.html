@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Affiliate Program - ShopHub</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">ShopHub</div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Shop</a></li>
+                <li><a href="cart.html">Cart</a></li>
+                <li><a href="affiliate.html">Join Affiliate</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="affiliate-hero section">
+        <div class="container">
+            <h1>Affiliate Program</h1>
+            <p>Earn Commission Promoting ShopHub Products</p>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="affiliate-container">
+                <div class="affiliate-info">
+                    <h2>How It Works</h2>
+                    <div class="benefits-grid">
+                        <div class="benefit-card">
+                            <h3>💰 Earn Commission</h3>
+                            <p>Get 5-20% commission on every sale made through your referral link</p>
+                        </div>
+                        <div class="benefit-card">
+                            <h3>📱 Easy Sharing</h3>
+                            <p>Share on TikTok, Facebook, Instagram and more with your unique affiliate code</p>
+                        </div>
+                        <div class="benefit-card">
+                            <h3>📊 Track Earnings</h3>
+                            <p>Real-time dashboard to track clicks, sales, and commissions</p>
+                        </div>
+                        <div class="benefit-card">
+                            <h3>🚀 Grow Your Income</h3>
+                            <p>Unlock higher commission rates as you drive more sales</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="affiliate-signup">
+                    <h2>Join Our Affiliate Program</h2>
+                    <form id="affiliate-form" onsubmit="registerAffiliate(event)">
+                        <div class="form-group">
+                            <label for="aff_name">Full Name *</label>
+                            <input type="text" id="aff_name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="aff_email">Email Address *</label>
+                            <input type="email" id="aff_email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="aff_phone">Phone Number</label>
+                            <input type="tel" id="aff_phone">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="aff_platform">Primary Promotion Platform *</label>
+                            <select id="aff_platform" required>
+                                <option value="">Select Platform</option>
+                                <option value="tiktok">TikTok</option>
+                                <option value="facebook">Facebook</option>
+                                <option value="instagram">Instagram</option>
+                                <option value="youtube">YouTube</option>
+                                <option value="blog">Blog/Website</option>
+                                <option value="email">Email Marketing</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="aff_followers">Estimated Followers/Subscribers</label>
+                            <input type="number" id="aff_followers" placeholder="0">
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="aff_terms" required>
+                                I agree to the Affiliate Terms & Conditions
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-large">
+                            Register as Affiliate
+                        </button>
+                    </form>
+
+                    <div id="affiliate-success" style="display: none;">
+                        <div class="success-box">
+                            <h2>Welcome to ShopHub Affiliate Program!</h2>
+                            <p>Your affiliate account has been created successfully!</p>
+                            <div class="affiliate-credentials">
+                                <div class="credential-row">
+                                    <label>Your Affiliate Code:</label>
+                                    <strong><span id="affiliate-code"></span></strong>
+                                    <button class="btn btn-secondary" onclick="copyAffiliateCode()">Copy</button>
+                                </div>
+                                <div class="credential-row">
+                                    <label>Referral Link:</label>
+                                    <strong><span id="affiliate-link"></span></strong>
+                                    <button class="btn btn-secondary" onclick="copyReferralLink()">Copy</button>
+                                </div>
+                            </div>
+
+                            <h3>How to Share:</h3>
+                            <ul>
+                                <li>Share your referral link on your TikTok, Facebook, or Instagram</li>
+                                <li>Include your affiliate code in video descriptions, bios, or captions</li>
+                                <li>When customers purchase using your link or code, you earn commission!</li>
+                            </ul>
+
+                            <button class="btn btn-primary" onclick="viewAffiliateStats()">
+                                View My Stats
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="faq-section section">
+        <div class="container">
+            <h2>Frequently Asked Questions</h2>
+            
+            <div class="faq-item">
+                <h4>📍 What commission rate do I earn?</h4>
+                <p>We offer 5% commission on every sale for new affiliates. As you grow, you can earn up to 20% on qualifying sales.</p>
+            </div>
+
+            <div class="faq-item">
+                <h4>💳 When do I get paid?</h4>
+                <p>Commissions are paid monthly via bank transfer or e-wallet on the 15th of each month for the previous month's sales.</p>
+            </div>
+
+            <div class="faq-item">
+                <h4>🔗 Can I share my link on social media?</h4>
+                <p>Absolutely! You can share on TikTok, Facebook, Instagram, YouTube, blogs, and emails. Use the hashtag #ShopHub to increase visibility.</p>
+            </div>
+
+            <div class="faq-item">
+                <h4>📊 How do I track my sales?</h4>
+                <p>You get a personalized dashboard showing real-time clicks, conversions, and earnings. Check it anytime to monitor your progress.</p>
+            </div>
+
+            <div class="faq-item">
+                <h4>🚫 Are there any restrictions?</h4>
+                <p>You cannot engage in paid advertising through Google Ads or similar platforms. Organic promotion on social media is encouraged.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 ShopHub. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="assets/js/app.js"></script>
+    <script src="assets/js/social.js"></script>
+    <script>
+        async function registerAffiliate(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('aff_name').value;
+            const email = document.getElementById('aff_email').value;
+            const platform = document.getElementById('aff_platform').value;
+
+            try {
+                const response = await fetch('/api/affiliate/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: name,
+                        email: email,
+                        platform: platform,
+                        commission_rate: 5
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Registration failed');
+                }
+
+                const result = await response.json();
+                
+                // Hide form and show success
+                document.getElementById('affiliate-form').style.display = 'none';
+                document.getElementById('affiliate-success').style.display = 'block';
+                document.getElementById('affiliate-code').textContent = result.affiliate_code;
+                document.getElementById('affiliate-link').textContent = `https://shophub.com?ref=${result.affiliate_code}`;
+
+                // Save affiliate code to localStorage
+                localStorage.setItem('my_affiliate_code', result.affiliate_code);
+
+            } catch (error) {
+                console.error('Error registering affiliate:', error);
+                alert('Error registering. Please try again.');
+            }
+        }
+
+        function copyAffiliateCode() {
+            const code = document.getElementById('affiliate-code').textContent;
+            navigator.clipboard.writeText(code);
+            alert('Affiliate code copied to clipboard!');
+        }
+
+        function copyReferralLink() {
+            const link = document.getElementById('affiliate-link').textContent;
+            navigator.clipboard.writeText(link);
+            alert('Referral link copied to clipboard!');
+        }
+
+        function viewAffiliateStats() {
+            const code = localStorage.getItem('my_affiliate_code');
+            if (code) {
+                location.href = `affiliate-stats.html?code=${code}`;
+            }
+        }
+    </script>
+</body>
+</html>

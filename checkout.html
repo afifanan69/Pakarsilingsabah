@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - ShopHub</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">ShopHub</div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Shop</a></li>
+                <li><a href="cart.html">Cart</a></li>
+                <li><a href="affiliate.html">Join Affiliate</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="section">
+        <div class="container">
+            <h1>Checkout</h1>
+
+            <div class="checkout-container">
+                <form class="checkout-form" id="checkout-form" onsubmit="handleCheckout(event)">
+                    <h2>Customer Information</h2>
+                    <div class="form-group">
+                        <label for="customer_name">Full Name *</label>
+                        <input type="text" id="customer_name" name="customer_name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="customer_email">Email Address *</label>
+                        <input type="email" id="customer_email" name="customer_email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="customer_phone">Phone Number</label>
+                        <input type="tel" id="customer_phone" name="customer_phone">
+                    </div>
+
+                    <h2>Select Payment Method</h2>
+                    <div class="payment-methods" id="payment-methods">
+                        <!-- Payment methods will be loaded here -->
+                    </div>
+
+                    <div id="payment-details" style="display: none;">
+                        <!-- Card payment details -->
+                        <div id="card-payment" style="display: none;">
+                            <h3>Card Details</h3>
+                            <div class="form-group">
+                                <label for="card_holder">Card Holder Name *</label>
+                                <input type="text" id="card_holder" name="card_holder">
+                            </div>
+                            <div class="form-group">
+                                <label for="card_number">Card Number (16 digits) *</label>
+                                <input type="text" id="card_number" name="card_number" placeholder="1234 5678 9012 3456" maxlength="16">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="card_expiry">Expiry Date (MM/YY) *</label>
+                                    <input type="text" id="card_expiry" name="card_expiry" placeholder="12/25" maxlength="5">
+                                </div>
+                                <div class="form-group">
+                                    <label for="card_cvv">CVV (3 digits) *</label>
+                                    <input type="text" id="card_cvv" name="card_cvv" placeholder="123" maxlength="3">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bank transfer details -->
+                        <div id="bank-transfer" style="display: none;">
+                            <h3>Bank Transfer Details</h3>
+                            <p>Bank: International Bank of Commerce</p>
+                            <p>Account: 1234567890</p>
+                            <p>SWIFT Code: IBOCINBB</p>
+                            <p>Amount: <strong id="transfer-amount">$0.00</strong></p>
+                            <p><em>Please transfer the exact amount and reply with the receipt.</em></p>
+                        </div>
+
+                        <!-- E-Wallet details -->
+                        <div id="e-wallet" style="display: none;">
+                            <h3>E-Wallet Payment</h3>
+                            <p>You will be redirected to the e-wallet provider for payment.</p>
+                            <button type="button" class="btn btn-secondary">Proceed to E-Wallet ➜</button>
+                        </div>
+
+                        <!-- Crypto details -->
+                        <div id="crypto" style="display: none;">
+                            <h3>Cryptocurrency Payment</h3>
+                            <p>Amount: <strong id="crypto-amount">0.0001 BTC</strong></p>
+                            <p>Address: 1A1z7agoat72WFxvQwVj3</p>
+                            <p><em>Please send the exact amount to the address above.</em></p>
+                        </div>
+                    </div>
+
+                    <div class="order-summary">
+                        <h2>Order Summary</h2>
+                        <div id="order-items-summary"></div>
+                        <div class="summary-row total">
+                            <span>Total Amount:</span>
+                            <span id="order-total">$0.00</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="terms" required>
+                            I agree to the Terms & Conditions and Privacy Policy
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-large" id="submit-btn">
+                        Complete Order
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-large" onclick="location.href='cart.html'">
+                        Back to Cart
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 ShopHub. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="assets/js/app.js"></script>
+    <script src="assets/js/cart.js"></script>
+    <script>
+        let selectedPaymentMethod = null;
+        let currentOrder = null;
+
+        async function loadPaymentMethods() {
+            try {
+                const response = await fetch('/api/payment/methods');
+                const methods = await response.json();
+
+                const container = document.getElementById('payment-methods');
+                container.innerHTML = methods.map(method => `
+                    <label class="payment-option">
+                        <input type="radio" name="payment_method" value="${method.id}" onchange="selectPaymentMethod('${method.id}')">
+                        <span class="payment-label">${method.icon} ${method.name}</span>
+                    </label>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading payment methods:', error);
+            }
+        }
+
+        function selectPaymentMethod(method) {
+            selectedPaymentMethod = method;
+            
+            // Hide all payment details
+            document.getElementById('card-payment').style.display = 'none';
+            document.getElementById('bank-transfer').style.display = 'none';
+            document.getElementById('e-wallet').style.display = 'none';
+            document.getElementById('crypto').style.display = 'none';
+            document.getElementById('payment-details').style.display = 'block';
+
+            // Show selected method details
+            if (method === 'credit_card' || method === 'debit_card') {
+                document.getElementById('card-payment').style.display = 'block';
+            } else if (method === 'bank_transfer') {
+                document.getElementById('bank-transfer').style.display = 'block';
+                document.getElementById('transfer-amount').textContent = document.getElementById('order-total').textContent;
+            } else if (method === 'e_wallet') {
+                document.getElementById('e-wallet').style.display = 'block';
+            } else if (method === 'crypto') {
+                document.getElementById('crypto').style.display = 'block';
+                document.getElementById('crypto-amount').textContent = '0.0001 BTC';
+            }
+        }
+
+        function displayOrderSummary() {
+            const cart = getCart();
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const tax = subtotal * 0.1;
+            const total = subtotal + tax;
+
+            const itemsSummary = cart.map(item => `
+                <div class="summary-item">
+                    <span>${item.name} x${item.quantity}</span>
+                    <span>$${(item.price * item.quantity).toFixed(2)}</span>
+                </div>
+            `).join('');
+
+            document.getElementById('order-items-summary').innerHTML = itemsSummary;
+            document.getElementById('order-total').textContent = '$' + total.toFixed(2);
+        }
+
+        async function handleCheckout(event) {
+            event.preventDefault();
+
+            const customerName = document.getElementById('customer_name').value;
+            const customerEmail = document.getElementById('customer_email').value;
+            const customerPhone = document.getElementById('customer_phone').value;
+            const paymentMethod = selectedPaymentMethod;
+
+            if (!paymentMethod) {
+                alert('Please select a payment method');
+                return;
+            }
+
+            const cart = getCart();
+            const affiliateCode = localStorage.getItem('affiliate_code');
+
+            try {
+                // Create order
+                const createOrderResponse = await fetch('/api/orders/create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        customer_name: customerName,
+                        customer_email: customerEmail,
+                        customer_phone: customerPhone,
+                        items: cart,
+                        affiliate_code: affiliateCode
+                    })
+                });
+
+                if (!createOrderResponse.ok) {
+                    throw new Error('Failed to create order');
+                }
+
+                const orderData = await createOrderResponse.json();
+                currentOrder = orderData;
+
+                // Prepare payment data
+                let paymentData = {
+                    order_id: orderData.order_id,
+                    payment_method: paymentMethod
+                };
+
+                // Add card details if credit/debit card
+                if (paymentMethod === 'credit_card' || paymentMethod === 'debit_card') {
+                    paymentData.card_holder = document.getElementById('card_holder').value;
+                    paymentData.card_number = document.getElementById('card_number').value;
+                    paymentData.card_expiry = document.getElementById('card_expiry').value;
+                    paymentData.card_cvv = document.getElementById('card_cvv').value;
+                }
+
+                // Process payment
+                const paymentResponse = await fetch('/api/payment/process', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(paymentData)
+                });
+
+                if (!paymentResponse.ok) {
+                    throw new Error('Payment processing failed');
+                }
+
+                const paymentResult = await paymentResponse.json();
+
+                if (paymentResult.payment_status === 'completed') {
+                    // Clear cart and redirect to success page
+                    localStorage.removeItem('cart');
+                    localStorage.removeItem('affiliate_code');
+                    location.href = `success.html?order_id=${orderData.order_id}&order_number=${orderData.order_number}&transaction_id=${paymentResult.transaction_id}`;
+                } else if (paymentResult.payment_status === 'pending') {
+                    // Redirect to pending page
+                    location.href = `pending.html?order_id=${orderData.order_id}&order_number=${orderData.order_number}`;
+                } else {
+                    // Payment failed
+                    location.href = `cancellation.html?order_id=${orderData.order_id}&reason=payment_failed`;
+                }
+            } catch (error) {
+                console.error('Checkout error:', error);
+                alert('An error occurred during checkout. Please try again.');
+                location.href = `cancellation.html?reason=checkout_error&message=${encodeURIComponent(error.message)}`;
+            }
+        }
+
+        loadPaymentMethods();
+        displayOrderSummary();
+    </script>
+</body>
+</html>

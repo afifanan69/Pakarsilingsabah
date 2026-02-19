@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Pending - ShopHub</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">ShopHub</div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Shop</a></li>
+                <li><a href="affiliate.html">Join Affiliate</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="pending-section section">
+        <div class="container">
+            <div class="pending-container">
+                <div class="pending-icon">⏳</div>
+                <h1>Payment Pending</h1>
+                <p class="pending-message">Your order is awaiting payment confirmation</p>
+
+                <div class="order-details">
+                    <h2>Order Information</h2>
+                    <div class="detail-row">
+                        <span>Order Number:</span>
+                        <strong id="order-number">-</strong>
+                    </div>
+                    <div class="detail-row">
+                        <span>Order ID:</span>
+                        <strong id="order-id">-</strong>
+                    </div>
+                    <div class="detail-row">
+                        <span>Status:</span>
+                        <strong style="color: #ff9800;">Awaiting Confirmation</strong>
+                    </div>
+                </div>
+
+                <div class="pending-instructions">
+                    <h3>What Happens Next?</h3>
+                    <p>Your payment is being processed. Depending on your payment method:</p>
+                    <ul>
+                        <li><strong>Bank Transfer:</strong> Please ensure you have transferred the exact amount. Confirmation may take 1-2 business days.</li>
+                        <li><strong>Cryptocurrency:</strong> Your transaction will be confirmed on the blockchain. This may take several minutes to hours.</li>
+                        <li><strong>Other Methods:</strong> Your payment is being verified. You'll receive confirmation via email shortly.</li>
+                    </ul>
+                </div>
+
+                <div class="next-steps">
+                    <h3>Important Notes</h3>
+                    <ul>
+                        <li>📧 Check your email for payment instructions</li>
+                        <li>📱 Keep your order number for reference</li>
+                        <li>⏱️ Do not close this window for 10 minutes</li>
+                        <li>🔄 Your order will be automatically updated once payment is confirmed</li>
+                    </ul>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="checkPaymentStatus()">
+                        Check Payment Status
+                    </button>
+                    <button class="btn btn-secondary" onclick="location.href='index.html'">
+                        Back to Home
+                    </button>
+                </div>
+
+                <div class="support-section">
+                    <h3>Need Assistance?</h3>
+                    <p>If your payment hasn't been confirmed within 24 hours:</p>
+                    <p>📧 <strong>Email:</strong> support@shophub.com</p>
+                    <p>📞 <strong>Phone:</strong> 1-800-SHOPHUB</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 ShopHub. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="assets/js/app.js"></script>
+    <script>
+        function loadOrderDetails() {
+            const params = new URLSearchParams(window.location.search);
+            const orderId = params.get('order_id');
+            const orderNumber = params.get('order_number');
+
+            document.getElementById('order-id').textContent = orderId || '-';
+            document.getElementById('order-number').textContent = orderNumber || '-';
+        }
+
+        function checkPaymentStatus() {
+            alert('Payment status check: Your payment is still being processed. Please check your email or contact support.');
+        }
+
+        loadOrderDetails();
+    </script>
+</body>
+</html>

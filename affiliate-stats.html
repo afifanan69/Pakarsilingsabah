@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Affiliate Statistics - ShopHub</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">ShopHub</div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Shop</a></li>
+                <li><a href="affiliate.html">Join Affiliate</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="section">
+        <div class="container">
+            <h1>Affiliate Dashboard</h1>
+
+            <div class="affiliate-dashboard">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Clicks</h3>
+                        <p class="stat-number" id="total-clicks">0</p>
+                        <small>Tracking conversions</small>
+                    </div>
+
+                    <div class="stat-card">
+                        <h3>Total Sales</h3>
+                        <p class="stat-number" id="total-sales">0</p>
+                        <small>Completed orders</small>
+                    </div>
+
+                    <div class="stat-card">
+                        <h3>Total Earnings</h3>
+                        <p class="stat-number" id="total-earnings">$0.00</p>
+                        <small>Commission earned</small>
+                    </div>
+
+                    <div class="stat-card">
+                        <h3>Commission Rate</h3>
+                        <p class="stat-number" id="commission-rate">5%</p>
+                        <small>Current rate</small>
+                    </div>
+                </div>
+
+                <div class="affiliate-info-box">
+                    <h2>Your Affiliate Information</h2>
+                    <div class="info-row">
+                        <label>Affiliate Name:</label>
+                        <strong id="aff-name">-</strong>
+                    </div>
+                    <div class="info-row">
+                        <label>Affiliate Code:</label>
+                        <strong>
+                            <span id="aff-code">-</span>
+                            <button class="btn btn-secondary" onclick="copyCode()">Copy</button>
+                        </strong>
+                    </div>
+                    <div class="info-row">
+                        <label>Email:</label>
+                        <strong id="aff-email">-</strong>
+                    </div>
+                    <div class="info-row">
+                        <label>Platform:</label>
+                        <strong id="aff-platform">-</strong>
+                    </div>
+                    <div class="info-row">
+                        <label>Membership Since:</label>
+                        <strong id="aff-date">-</strong>
+                    </div>
+                </div>
+
+                <div class="share-links-box">
+                    <h2>Share Your Links</h2>
+                    <p>Use these to promote ShopHub and earn commissions:</p>
+                    <div class="link-share">
+                        <button class="btn btn-secondary" onclick="shareOnTikTok()">
+                            🎵 Share on TikTok
+                        </button>
+                        <button class="btn btn-secondary" onclick="shareOnFacebook()">
+                            👍 Share on Facebook
+                        </button>
+                        <button class="btn btn-secondary" onclick="shareOnInstagram()">
+                            📷 Share on Instagram
+                        </button>
+                    </div>
+                </div>
+
+                <div class="tips-box">
+                    <h2>Tips to Increase Earnings</h2>
+                    <ul>
+                        <li>📱 Create engaging TikTok videos showcasing products</li>
+                        <li>👍 Share regularly on Facebook with product recommendations</li>
+                        <li>📸 Post Instagram Reels with your referral codes</li>
+                        <li>💬 Engage with comments and answer product questions</li>
+                        <li>🎯 Target your audience with relevant products</li>
+                        <li>🔄 Post consistently to maintain visibility</li>
+                    </ul>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" onclick="location.href='products.html'">
+                Browse Products to Share
+            </button>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 ShopHub. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="assets/js/app.js"></script>
+    <script src="assets/js/social.js"></script>
+    <script>
+        async function loadAffiliateStats() {
+            const params = new URLSearchParams(window.location.search);
+            const code = params.get('code');
+
+            if (!code) {
+                document.body.innerHTML = '<p>Invalid affiliate code. <a href="affiliate.html">Register here</a></p>';
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/affiliate/stats/${code}`);
+                const data = await response.json();
+
+                if (data.error) {
+                    document.body.innerHTML = '<p>Affiliate not found. <a href="affiliate.html">Register here</a></p>';
+                    return;
+                }
+
+                // Display affiliate info
+                document.getElementById('aff-name').textContent = data.affiliate.affiliate_name;
+                document.getElementById('aff-code').textContent = data.affiliate.affiliate_code;
+                document.getElementById('aff-email').textContent = data.affiliate.affiliate_email || '-';
+                document.getElementById('aff-platform').textContent = data.affiliate.platform || '-';
+                document.getElementById('commission-rate').textContent = data.affiliate.commission_rate + '%';
+                
+                const createdDate = new Date(data.affiliate.created_at).toLocaleDateString();
+                document.getElementById('aff-date').textContent = createdDate;
+
+                // Display stats
+                document.getElementById('total-clicks').textContent = data.clicks;
+                document.getElementById('total-sales').textContent = data.sales;
+                document.getElementById('total-earnings').textContent = '$' + (data.total_commission || 0).toFixed(2);
+
+            } catch (error) {
+                console.error('Error loading affiliate stats:', error);
+            }
+        }
+
+        function copyCode() {
+            const code = document.getElementById('aff-code').textContent;
+            navigator.clipboard.writeText(code);
+            alert('Affiliate code copied!');
+        }
+
+        function shareOnTikTok() {
+            const code = document.getElementById('aff-code').textContent;
+            alert(`Share this code on TikTok: ${code}\nOr visit: https://shophub.com?ref=${code}`);
+            window.open('https://www.tiktok.com/', '_blank');
+        }
+
+        function shareOnFacebook() {
+            const code = document.getElementById('aff-code').textContent;
+            alert(`Share this code on Facebook: ${code}`);
+            window.open('https://www.facebook.com/', '_blank');
+        }
+
+        function shareOnInstagram() {
+            const code = document.getElementById('aff-code').textContent;
+            alert(`Share this code on Instagram: ${code}`);
+            window.open('https://www.instagram.com/', '_blank');
+        }
+
+        loadAffiliateStats();
+    </script>
+</body>
+</html>

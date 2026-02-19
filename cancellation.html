@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Cancelled - ShopHub</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">ShopHub</div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Shop</a></li>
+                <li><a href="affiliate.html">Join Affiliate</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="cancellation-section section">
+        <div class="container">
+            <div class="cancellation-container">
+                <div class="cancel-icon">✗</div>
+                <h1>Order Cancelled</h1>
+                <p class="cancel-message">We're sorry to see you go.</p>
+
+                <div class="cancellation-details">
+                    <div id="reason-section" style="display: none;">
+                        <h2>Cancellation Reason</h2>
+                        <p id="cancellation-reason">-</p>
+                    </div>
+
+                    <div id="error-section" style="display: none;">
+                        <h2>Error Details</h2>
+                        <p id="error-message">An unexpected error occurred.</p>
+                    </div>
+                </div>
+
+                <div class="help-section">
+                    <h3>Need Help?</h3>
+                    <ul>
+                        <li>📧 <strong>Email us:</strong> support@shophub.com</li>
+                        <li>📞 <strong>Call us:</strong> 1-800-SHOPHUB</li>
+                        <li>💬 <strong>Chat with us:</strong> Available 24/7</li>
+                    </ul>
+                </div>
+
+                <div class="alternative-actions">
+                    <h3>What would you like to do?</h3>
+                    <button class="btn btn-primary" onclick="location.href='cart.html'">
+                        Return to Cart
+                    </button>
+                    <button class="btn btn-secondary" onclick="location.href='products.html'">
+                        Continue Shopping
+                    </button>
+                    <button class="btn btn-secondary" onclick="location.href='index.html'">
+                        Back to Home
+                    </button>
+                </div>
+
+                <div class="promotional-section">
+                    <h3>Special Offer Just for You!</h3>
+                    <p>Use code <strong>COMEBACK10</strong> for 10% off your next purchase</p>
+                    <button class="btn btn-success" onclick="location.href='products.html'">
+                        Claim This Offer
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 ShopHub. All rights reserved.</p>
+            <ul>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms & Conditions</a></li>
+                <li><a href="#">Contact Us</a></li>
+            </ul>
+        </div>
+    </footer>
+
+    <script>
+        function loadCancellationDetails() {
+            const params = new URLSearchParams(window.location.search);
+            const reason = params.get('reason');
+            const message = params.get('message');
+
+            if (reason) {
+                document.getElementById('reason-section').style.display = 'block';
+                
+                let reasonText = '';
+                switch(reason) {
+                    case 'payment_failed':
+                        reasonText = 'Your payment was declined. Please check your card details and try again.';
+                        break;
+                    case 'checkout_error':
+                        reasonText = 'An error occurred during checkout.';
+                        if (message) {
+                            reasonText += ' Details: ' + decodeURIComponent(message);
+                        }
+                        break;
+                    case 'inventory_unavailable':
+                        reasonText = 'One or more items in your cart are no longer available.';
+                        break;
+                    case 'user_cancelled':
+                        reasonText = 'You cancelled this order.';
+                        break;
+                    default:
+                        reasonText = 'Your order could not be processed.';
+                }
+                
+                document.getElementById('cancellation-reason').textContent = reasonText;
+            }
+        }
+
+        loadCancellationDetails();
+    </script>
+</body>
+</html>

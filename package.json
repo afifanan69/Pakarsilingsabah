@@ -1,0 +1,28 @@
+{
+  "name": "ecommerce-site",
+  "version": "1.0.0",
+  "description": "Full-featured ecommerce site with local payment gateway, affiliate system, and social media integration",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
+  },
+  "keywords": [
+    "ecommerce",
+    "payment",
+    "affiliate",
+    "social-media"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "sqlite3": "^5.1.6",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
